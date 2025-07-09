@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const API = 'https://remis-1p9w.onrender.com';
+
 function AdminPanel() {
   const [clave, setClave] = useState('');
   const [acceso, setAcceso] = useState(false);
@@ -8,7 +10,7 @@ function AdminPanel() {
   const [mensaje, setMensaje] = useState('');
 
   const verificarClave = async () => {
-    const res = await fetch('http://localhost:3000/reservas', {
+    const res = await fetch(`${API}/reservas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ clave }),
@@ -19,7 +21,7 @@ function AdminPanel() {
       setReservas(data.reservas);
       setAcceso(true);
 
-      const horariosRes = await fetch('http://localhost:3000/horarios');
+      const horariosRes = await fetch(`${API}/horarios`);
       const horariosData = await horariosRes.json();
       setHorarios(horariosData);
     } else {
@@ -28,7 +30,7 @@ function AdminPanel() {
   };
 
   const actualizarHorarios = async () => {
-    const res = await fetch('http://localhost:3000/actualizar-horarios', {
+    const res = await fetch(`${API}/actualizar-horarios`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...horarios, clave }),
