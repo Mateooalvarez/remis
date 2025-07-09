@@ -19,7 +19,6 @@ function AdminPanel() {
       setReservas(data.reservas);
       setAcceso(true);
 
-      // Trae también los horarios
       const horariosRes = await fetch('http://localhost:3000/horarios');
       const horariosData = await horariosRes.json();
       setHorarios(horariosData);
@@ -41,6 +40,9 @@ function AdminPanel() {
       setMensaje('❌ Error al actualizar horarios');
     }
   };
+
+  const generarMensaje = (nombre) =>
+    `Hola ${nombre}, el viaje sale a las ${horarios.ida} y vuelve a las ${horarios.vuelta}.`;
 
   if (!acceso) {
     return (
@@ -68,8 +70,28 @@ function AdminPanel() {
       ) : (
         <ul>
           {reservas.map((r, i) => (
-            <li key={i}>
-              <strong>{r.nombre}</strong> - {r.fecha} - {r.tipoViaje} - {r.telefono}
+            <li key={i} style={{ marginBottom: '10px' }}>
+              <strong>{r.nombre}</strong> - {r.fecha} - {r.tipoViaje} - {r.hora} - {r.telefono}
+              <br />
+              <a
+                href={`https://wa.me/54${r.telefono}?text=${encodeURIComponent(
+                  generarMensaje(r.nombre)
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  marginTop: '4px',
+                  backgroundColor: '#25D366',
+                  color: 'white',
+                  padding: '4px 10px',
+                  borderRadius: '5px',
+                  textDecoration: 'none',
+                  fontSize: '14px'
+                }}
+              >
+                Enviar WhatsApp
+              </a>
             </li>
           ))}
         </ul>
